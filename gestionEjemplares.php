@@ -1,5 +1,5 @@
 <?php
-// 1. Iniciamos sesión y requerimos la conexión de bibliotecario (permisos totales)
+// Iniciamos sesion y requerimos la conexión de bibliotecario (permisos totales)
 session_start();
 require_once 'conexion/conexionBibliotecario.php';
 
@@ -9,7 +9,7 @@ $mensaje = null;
 try {
     $conexion = conectarBibliotecario();
 
-    // --- ACCIÓN: BORRAR EJEMPLAR ---
+    // Borrar ejemplar
     if (isset($_GET['borrar'])) {
         $idBorrar = $_GET['borrar'];
         $sqlDelete = "DELETE FROM ejemplares WHERE Id_Ejemplar = :id";
@@ -19,7 +19,7 @@ try {
         exit();
     }
 
-    // --- ACCIÓN: AÑADIR EJEMPLAR ---
+    // Añadir ejemplar
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['accion'] === 'añadir') {
         $isbn = $_POST['isbn'] ?? '';
         $estado = $_POST['estado'] ?? 'Disponible';
@@ -35,7 +35,7 @@ try {
         }
     }
 
-    // --- OBTENER TODOS LOS EJEMPLARES ---
+    // Obtener todos los ejemplares
     $sqlSelect = "SELECT Id_Ejemplar, ISBN_Libro, Estado FROM ejemplares";
     $stmtSelect = $conexion->query($sqlSelect);
     $ejemplares = $stmtSelect->fetchAll();
@@ -95,7 +95,7 @@ try {
 
     <hr>
 
-    <!-- Tabla para LISTAR y BORRAR / EDITAR -->
+    <!-- Tabla para LISTAR, BORRAR y EDITAR -->
     <h2>Ejemplares Existentes</h2>
     <table>
         <thead>
@@ -119,7 +119,7 @@ try {
                                onclick="return confirm('¿Estás seguro de que quieres borrar este ejemplar?');" 
                                style="color: red; text-decoration: none; margin-right: 10px;">Borrar</a>
                             
-                            <!-- Enlace para ir a una página de edición (opcional) -->
+                            <!-- Enlace para ir a una página de edición -->
                             <a href="editarEjemplar.php?id=<?= $ejemplar['Id_Ejemplar'] ?>" 
                                style="color: blue; text-decoration: none;">Editar</a>
                         </td>

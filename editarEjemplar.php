@@ -1,8 +1,11 @@
 <?php
-
+// Iniciamos sesion y requerimos la conexión de bibliotecario (permisos totales)
+session_start();
 require_once "conexion/conexionBibliotecario.php";
 
+// Extremos el ID del ejemplar a editar
 $idEjemplar = $_GET["id"] ?? null;
+
 
 if ($idEjemplar) {
     try {

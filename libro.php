@@ -1,5 +1,4 @@
 <?php
-// libro.php (VERSIÓN VULNERABLE PARA CLASE - MULTIPLES RESULTADOS)
 
 require_once 'conexion/conexionCliente.php';
 
@@ -21,7 +20,7 @@ if ($ISBN_recibido) {
         $stmt = $conexion->prepare($sql);
         $stmt->execute(['isbn' => $ISBN_recibido]);
 
-        // CAMBIO CLAVE: Usamos fetch() para atrapar la primera fila que devuelva MySQL
+        // Usamos fetch() para atrapar la primera fila que devuelva MySQL
         $libro = $stmt->fetch();
 
         // Comprobamos si el array está vacío

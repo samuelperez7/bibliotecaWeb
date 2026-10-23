@@ -1,6 +1,6 @@
 <?php
 
-require_once 'conexion/conexionCliente.php'; // Incluir el archivo de conexión a la base de datos
+require_once 'conexion/conexionCliente.php';
 
 $ejemplares = [];
 $error = null;
@@ -9,7 +9,6 @@ try{
     $conexion = conectarCliente();
 
     $consultaSQL = "SELECT Id_Ejemplar, ISBN_Libro, Estado FROM ejemplares";
-    //$consultaSQL = "SELECT * FROM ejemplares"
 
     $statement = $conexion->query($consultaSQL);
 
@@ -32,7 +31,7 @@ try{
         <?php elseif(empty($ejemplares)): ?>
             <p> No hay ejemplares disponibles </p>
         <?php else: ?>
-            <!--Creamos una tabla para crear los datos-->
+            <!--Creamos una tabla para mostrar los ejmplares-->
             <table>
                 <thead>
                     <tr>
