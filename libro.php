@@ -34,9 +34,9 @@ if ($ISBN_recibido) {
 } else {
     $error = "No se ha especificado qué libro quieres ver.";
 }
+?>
 
 // 3. Salida HTML (Vista)
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
