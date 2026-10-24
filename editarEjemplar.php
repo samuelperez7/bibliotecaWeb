@@ -3,32 +3,44 @@
 session_start();
 require_once "conexion/conexionBibliotecario.php";
 
-// Extremos el ID del ejemplar a editar
-$idEjemplar = $_GET["id"] ?? null;
-
 $error = null;
+$conexion = conectarBibliotecario();
 
-if ($idEjemplar) {
-    try {
-        $conexion = conectarBibliotecario();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recogemos el ID oculto y el estado seleccionado en el <select>
+    $idEjemplar = $_POST['id_ejemplar'] ?? '';
+    $nuevoEstado = $_POST['estado'] ?? '';
 
-        $sql = "SELECT Id_Ejemplar, ISBN_Libro, Estado FROM ejemplares WHERE Id_Ejemplar=$idEjemplar";
+    if (!empty($idEjemplar) && !empty($nuevoEstado)) {
+        try {
+            $sql = "UPDATE ejemplares SET Estado = :estado WHERE Id_Ejemplar = :id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->execute([
+                'estado' => $nuevoEstado,
+                'id' => $idEjemplar
+            ]);
 
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute();
+            // Redirigimos de vuelta a la gestión con mensaje de éxito
+            header('Location: gestionEjemplares.php?mensaje=Ejemplar actualizado correctamente');
+            exit();
 
-        $ejemplar = $stmt->fetch();
-
-        if (empty($ejemplar)) {
-            $error = "No se ha encontrado ningún ejemplar con ese ID.";
+        } catch (PDOException $e) {
+            $error = "Error al actualizar: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        $error = "Error SQL: " . $e->getMessage();
+    } else {
+        $error = "Faltan datos obligatorios.";
     }
-} else {
-    $error = "No se ha especificado qué ejemplar quieres editar.";
 }
-;
+
+
+$idRecibido = $_GET['id'] ?? null;
+$ejemplar = null;
+
+if ($idRecibido) {
+    $stmt = $conexion->prepare("SELECT * FROM ejemplares WHERE Id_Ejemplar = :id");
+    $stmt->execute(['id' => $idRecibido]);
+    $ejemplar = $stmt->fetch();
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,22 +101,36 @@ if ($idEjemplar) {
     <h1>Editar el ejemplar</h1>
 
     <?php if ($error): ?>
-        <p class="error"><?= htmlspecialchars($error) ?></p>
-    <?php elseif (!empty($ejemplar)): ?>
-
-        <!-- Recorremos el array con un bucle foreach -->
-        <div class="tarjeta">
-            <p><strong>ID:</strong> <?= htmlspecialchars($ejemplar['Id_Ejemplar']) ?></p>
-            <p><strong>ISBN:</strong> <?= htmlspecialchars($ejemplar['ISBN_Libro']) ?></p>
-            <p><strong>Estado:</strong> <?= htmlspecialchars($ejemplar['Estado']) ?></p>
-        </div>
-
-
+        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
-    <br>
-    <a href="gestionEjemplares.php" class="volver">← Volver al catálogo</a>
+    <div class="tarjeta">
+        <?php if ($ejemplar): ?>
+            <form action="editarEjemplar.php" method="POST">
 
+                <!-- Campo oculto para llevar el ID del ejemplar que estamos editando -->
+                <input type="hidden" name="id_ejemplar" value="<?= htmlspecialchars($ejemplar['Id_Ejemplar']) ?>">
+
+                <label>Estado actual: <strong><?= htmlspecialchars($ejemplar['Estado']) ?></strong></label><br><br>
+
+                <label for="estado">Nuevo Estado:</label><br>
+                <select id="estado" name="estado">
+                    <option value="Disponible" <?= ($ejemplar['Estado'] == 'Disponible') ? 'selected' : '' ?>>Disponible
+                    </option>
+                    <option value="Prestado" <?= ($ejemplar['Estado'] == 'Prestado') ? 'selected' : '' ?>>Prestado</option>
+                    <option value="Dado de baja" <?= ($ejemplar['Estado'] == 'Dado de baja') ? 'selected' : '' ?>>Dado de baja
+                    </option>
+                </select><br><br>
+
+                <button type="submit">Actualizar Cambios</button>
+            </form>
+        <?php else: ?>
+            <p>No se ha especificado un ejemplar válido para editar.</p>
+        <?php endif; ?>
+    </div>
+
+    <br>
+    <a href="gestionEjemplares.php" class="volver">← Volver al panel</a>
 </body>
 
 </html>
