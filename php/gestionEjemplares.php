@@ -50,23 +50,15 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/style.css">
     <title>Gestión de Ejemplares</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .error { color: red; }
-        .success { color: green; }
-        .form-container { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 20px; max-width: 400px; }
-    </style>
 </head>
 <body>
 
     <h1>Panel de Bibliotecario - Gestión de Ejemplares</h1>
 
     <?php if (isset($_GET['mensaje'])): ?>
-        <p class="success"><?= htmlspecialchars($_GET['mensaje']) ?></p>
+        <p class="exito"><?= htmlspecialchars($_GET['mensaje']) ?></p>
     <?php endif; ?>
 
     <?php if ($error): ?>
@@ -74,25 +66,24 @@ try {
     <?php endif; ?>
 
     <!-- Formulario para AÑADIR un nuevo ejemplar -->
-    <div class="form-container">
+    <div class="card" style="width: 300px;">
+        <div class="card-overlay"></div>
+        <div class="card-inner">
         <h3>Añadir Nuevo Ejemplar</h3>
         <form action="gestionEjemplares.php" method="POST">
             <input type="hidden" name="accion" value="añadir">
-            
             <label for="isbn">ISBN del Libro:</label><br>
             <input type="text" id="isbn" name="isbn" required><br><br>
-
             <label for="estado">Estado:</label><br>
             <select id="estado" name="estado">
                 <option value="Disponible">Disponible</option>
                 <option value="Prestado">Prestado</option>
                 <option value="Dado de baja">Dado de baja</option>
             </select><br><br>
-
             <button type="submit">Guardar Ejemplar</button>
         </form>
+        </div>
     </div>
-
     <hr>
 
     <!-- Tabla para LISTAR, BORRAR y EDITAR -->
@@ -115,13 +106,10 @@ try {
                         <td><?= htmlspecialchars($ejemplar['Estado']) ?></td>
                         <td>
                             <!-- Enlace para Borrar -->
-                            <a href="gestionEjemplares.php?borrar=<?= $ejemplar['Id_Ejemplar'] ?>" 
-                               onclick="return confirm('¿Estás seguro de que quieres borrar este ejemplar?');" 
-                               style="color: red; text-decoration: none; margin-right: 10px;">Borrar</a>
+                            <a href="gestionEjemplares.php?borrar=<?= $ejemplar['Id_Ejemplar'] ?>" onclick="return confirm('¿Estás seguro de que quieres borrar este ejemplar?');" style="color: red; text-decoration: none; margin-right: 10px;">Borrar</a>
                             
                             <!-- Enlace para ir a una página de edición -->
-                            <a href="editarEjemplar.php?id=<?= $ejemplar['Id_Ejemplar'] ?>" 
-                               style="color: blue; text-decoration: none;">Editar</a>
+                            <a href="editarEjemplar.php?id=<?= $ejemplar['Id_Ejemplar'] ?>" style="color: blue; text-decoration: none;">Editar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -1,4 +1,22 @@
-/* From Uiverse.io by LilaRest */
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+}
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin-top: 20px;
+}
+th, td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: left;
+}
+th {
+	background-color: #f4f4f4;
+}
+
+/* Tarjetas */
 .card {
 	--bg: #e8e8e8;
 	--contrast: #e2e0e0;
@@ -11,6 +29,7 @@
 		rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
 		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
 		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+	margin: 30px 10px;
 }
 
 .card-overlay {
@@ -30,17 +49,20 @@
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+	align-items: left;
 	overflow: hidden;
-	width: 190px;
 	height: 254px;
 	background-color: var(--contrast);
 	border-radius: 30px;
-	/* Content style */
-	font-size: 30px;
-	font-weight: 900;
-	color: #c7c4c4;
-	text-align: center;
-	font-family: monospace;
+	align-items: center;
+}
+
+/* Mensajes */
+.error {
+	color: red;
+}
+.exito {
+	color: green;
 }
