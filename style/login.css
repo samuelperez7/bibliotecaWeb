@@ -1,0 +1,72 @@
+html {
+	height: 100%;
+}
+
+.contenedor-login {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	padding: 40px;
+	transform: translate(-50%, -50%);
+	background-color: var(--bg);
+    color: black;
+	box-sizing: border-box;
+	box-shadow:
+		rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+	border-radius: 35px;
+}
+
+.contenedor-login h2 {
+	margin: 0 0 30px;
+	padding: 0;
+	text-align: center;
+}
+
+.contenedor-login .campo-login {
+	position: relative;
+}
+
+.contenedor-login .campo-login input {
+	width: 100%;
+	padding: 10px 0;
+	font-size: 16px;
+	margin-bottom: 30px;
+	border: none;
+	border-bottom: 1px solid black;
+	outline: none;
+	background: transparent;
+}
+
+.contenedor-login .campo-login label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px 0;
+	font-size: 16px;
+	color: black;
+	pointer-events: none;
+	transition: 0.5s;
+}
+
+.contenedor-login .campo-login input:focus ~ label,
+.contenedor-login .campo-login input:valid ~ label {
+	top: -20px;
+	left: 0;
+	font-size: 12px;
+}
+
+.contenedor-login form a {
+	position: relative;
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	text-decoration: none;
+	text-transform: uppercase;
+	overflow: hidden;
+	transition: 0.5s;
+	margin-top: 40px;
+	letter-spacing: 4px;
+}
