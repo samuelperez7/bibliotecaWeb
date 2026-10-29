@@ -2,14 +2,15 @@
 
 if (!isset($_SESSION)) {
     session_start();
-    $sessionId = session_id();
 }
 if (!isset($_SESSION['nombre_usuario'])) {
     die("Error - debe <a href='../index.php'>Identificarse</a>.<br />");
 }
-$accesosPagina;
 
-$nombreCookie = "accesosPagina-".$sessionId;
+$hashIdUsuario = md5($_SESSION['id_usuario']);
+$nombreCookie = "accesosPagina-".$hashIdUsuario;
+
+$accesosPagina;
 
 if (isset($_COOKIE[$nombreCookie])) {
     $accesosPagina = $_COOKIE[$nombreCookie];
@@ -46,7 +47,7 @@ if (isset($_COOKIE[$nombreCookie])) {
 
 <body>
     <header>
-        <p>Pulse <a href="logout.php">aquí</a> para salir. <?= $sessionId ?></p>
+        <p>Pulse <a href="logout.php">aquí</a> para salir.</p>
     </header>
 
     <h2>Accesos a la pagina</h2>

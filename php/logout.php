@@ -2,12 +2,14 @@
 // Recuperamos la información de la sesión
 session_start();
 
+// Copiamos los parametros de la cookie de sesion
 $params = session_get_cookie_params();
 
 $_SESSION = Array();
 
+// Hacemos que la cookie caduque
 setcookie(
-    session_name(), // Es mejor usar session_name() en lugar de "PHPSESSID" por seguridad
+    session_name(), // ($_COOKIE["PHPSESSID"])
     '', 
     [
         'expires' => time() - 42000,

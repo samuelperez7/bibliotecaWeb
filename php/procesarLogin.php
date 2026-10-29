@@ -1,6 +1,6 @@
 <?php
 // Incluimos la conexión con permisos de bibliotecario (ubicada en la carpeta conexion)
-require_once "../conexionDB/conexion.php";
+require_once "conexionDB/conexion.php";
 
 // Verificamos que los datos lleguen por POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Iniciamos sesión en PHP
                 session_start();
                 session_regenerate_id(true);
-                $_SESSION['user_id'] = $usuario['Id'];
+                $_SESSION['id_usuario'] = $usuario['Id'];
                 $_SESSION['nombre_usuario'] = $usuario['Nombre_Usuario'];
 
                 // 4. Redirección basada en si es bibliotecario o no
