@@ -1,7 +1,7 @@
 <?php
 // Iniciamos sesion y requerimos la conexión de bibliotecario (permisos totales)
 session_start();
-require_once "conexion/conexionBibliotecario.php";
+require_once "../conexionDB/conexion.php";
 
 $error = null;
 $conexion = conectarBibliotecario();

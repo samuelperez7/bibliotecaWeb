@@ -1,6 +1,6 @@
 <?php
 
-require_once 'conexion/conexionCliente.php';
+require_once "../conexionDB/conexion.php";
 
 $ejemplares = [];
 $error = null;

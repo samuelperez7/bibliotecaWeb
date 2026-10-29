@@ -1,12 +1,12 @@
 <?php
 // Incluimos la conexión con permisos de bibliotecario (ubicada en la carpeta conexion)
-require_once 'conexion/conexionBibliotecario.php';
+require_once "../conexionDB/conexion.php";
 
 // Verificamos que los datos lleguen por POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    $usuarioForm = $_POST['usuario'] ?? '';
-    $passwordForm = $_POST['password'] ?? '';
+    $usuarioForm = $_POST['inputUsuario'] ?? '';
+    $passwordForm = $_POST['inputPassword'] ?? '';
 
     if (!empty($usuarioForm) && !empty($passwordForm)) {
         try {
@@ -28,17 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Iniciamos sesión en PHP
                 session_start();
+                session_regenerate_id(true);
                 $_SESSION['user_id'] = $usuario['Id'];
                 $_SESSION['nombre_usuario'] = $usuario['Nombre_Usuario'];
 
                 // 4. Redirección basada en si es bibliotecario o no
                 if (!empty($usuario['es_bibliotecario'])) {
                     // Si está en la tabla bibliotecarios, va a su panel de gestión total
-                    header('Location: gestionEjemplares.php');
+                    header('Location: accesos.php');
                     exit();
                 } else {
                     // Si es un cliente normal, va a la vista de préstamos
-                    header('Location: prestamos.php');
+                    header('Location: accesos.php');
                     exit();
                 }
 

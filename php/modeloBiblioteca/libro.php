@@ -1,6 +1,6 @@
 <?php
 
-require_once 'conexion/conexionCliente.php';
+require_once "../conexionDB/conexion.php";
 
 // 1. Capturamos el ID (ISBN) de la URL. Si no existe, asignamos null
 $ISBN_recibido = $_GET['id'] ?? null;
