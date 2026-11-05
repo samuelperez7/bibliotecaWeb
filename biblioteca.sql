@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 23, 2026 at 04:31 PM
+-- Host: 127.0.0.1:3307
+-- Generation Time: Nov 05, 2026 at 09:05 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.2.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,6 +34,15 @@ CREATE TABLE `autores` (
   `Edad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `autores`
+--
+
+INSERT INTO `autores` (`Id`, `Nombre`, `Apellidos`, `Edad`) VALUES
+(1, 'Miguel', 'de Cervantes', 68),
+(2, 'J.R.R.', 'Tolkien', 81),
+(3, 'Isaac', 'Asimov', 72);
+
 -- --------------------------------------------------------
 
 --
@@ -45,6 +54,14 @@ CREATE TABLE `bibliotecarios` (
   `Num_Seguridad_Social` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `bibliotecarios`
+--
+
+INSERT INTO `bibliotecarios` (`Id_Usuario`, `Num_Seguridad_Social`) VALUES
+(2, 'ES0987654321'),
+(1, 'ES1234567890');
+
 -- --------------------------------------------------------
 
 --
@@ -54,6 +71,14 @@ CREATE TABLE `bibliotecarios` (
 CREATE TABLE `clientes` (
   `Id_Usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `clientes`
+--
+
+INSERT INTO `clientes` (`Id_Usuario`) VALUES
+(3),
+(4);
 
 -- --------------------------------------------------------
 
@@ -67,6 +92,13 @@ CREATE TABLE `devoluciones` (
   `Fecha_Devolucion` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `devoluciones`
+--
+
+INSERT INTO `devoluciones` (`Id`, `Id_Prestamo`, `Fecha_Devolucion`) VALUES
+(1, 1, '2023-05-14');
+
 -- --------------------------------------------------------
 
 --
@@ -78,6 +110,14 @@ CREATE TABLE `editoriales` (
   `Nombre` varchar(100) NOT NULL,
   `Pais` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `editoriales`
+--
+
+INSERT INTO `editoriales` (`Id`, `Nombre`, `Pais`) VALUES
+(1, 'Editorial Planeta', 'España'),
+(2, 'Minotauro', 'Argentina');
 
 -- --------------------------------------------------------
 
@@ -91,6 +131,17 @@ CREATE TABLE `ejemplares` (
   `Estado` enum('Disponible','Prestado','Dado de baja') DEFAULT 'Disponible'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ejemplares`
+--
+
+INSERT INTO `ejemplares` (`Id_Ejemplar`, `ISBN_Libro`, `Estado`) VALUES
+(1, '978-84-111-1111-1', 'Disponible'),
+(2, '978-84-111-1111-1', 'Prestado'),
+(3, '978-84-222-2222-2', 'Disponible'),
+(4, '978-84-222-2222-2', 'Dado de baja'),
+(6, '978-84-333-3333-3', 'Prestado');
+
 -- --------------------------------------------------------
 
 --
@@ -101,6 +152,16 @@ CREATE TABLE `generos` (
   `Id` int(11) NOT NULL,
   `Nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `generos`
+--
+
+INSERT INTO `generos` (`Id`, `Nombre`) VALUES
+(4, 'Aventura'),
+(2, 'Ciencia Ficción'),
+(3, 'Clásico'),
+(1, 'Fantasía');
 
 -- --------------------------------------------------------
 
@@ -117,6 +178,15 @@ CREATE TABLE `gestion_inventario` (
   `Observaciones` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `gestion_inventario`
+--
+
+INSERT INTO `gestion_inventario` (`Id`, `Id_Bibliotecario`, `Id_Ejemplar`, `Accion`, `Fecha_Accion`, `Observaciones`) VALUES
+(1, 1, 1, 'Alta', '2023-01-10', 'Libro nuevo donado'),
+(2, 1, 2, 'Alta', '2023-01-10', 'Libro nuevo comprado'),
+(3, 2, 4, 'Baja por desgaste', '2023-10-15', 'Faltaban páginas del final');
+
 -- --------------------------------------------------------
 
 --
@@ -128,8 +198,18 @@ CREATE TABLE `libros` (
   `Titulo` varchar(255) NOT NULL,
   `Sinopsis` text DEFAULT NULL,
   `Id_Autor` int(11) DEFAULT NULL,
-  `Id_Editorial` int(11) DEFAULT NULL
+  `Id_Editorial` int(11) DEFAULT NULL,
+  `Ruta_Portada` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `libros`
+--
+
+INSERT INTO `libros` (`ISBN`, `Titulo`, `Sinopsis`, `Id_Autor`, `Id_Editorial`, `Ruta_Portada`) VALUES
+('978-84-111-1111-1', 'Don Quijote de la Mancha', 'Aventuras de un hidalgo caballero...', 1, 1, ''),
+('978-84-222-2222-2', 'El Señor de los Anillos', 'La comunidad del anillo emprende su viaje...', 2, 2, ''),
+('978-84-333-3333-3', 'Fundación', 'El declive del Imperio Galáctico...', 3, 2, '');
 
 -- --------------------------------------------------------
 
@@ -141,6 +221,17 @@ CREATE TABLE `libros_generos` (
   `ISBN_Libro` varchar(20) NOT NULL,
   `Id_Genero` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `libros_generos`
+--
+
+INSERT INTO `libros_generos` (`ISBN_Libro`, `Id_Genero`) VALUES
+('978-84-111-1111-1', 3),
+('978-84-111-1111-1', 4),
+('978-84-222-2222-2', 1),
+('978-84-222-2222-2', 4),
+('978-84-333-3333-3', 2);
 
 -- --------------------------------------------------------
 
@@ -157,6 +248,14 @@ CREATE TABLE `prestamos` (
   `Dias_Retraso` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `prestamos`
+--
+
+INSERT INTO `prestamos` (`Id`, `Id_Cliente`, `Id_Ejemplar`, `Fecha_Inicio`, `Fecha_Fin`, `Dias_Retraso`) VALUES
+(1, 3, 1, '2023-05-01', '2023-05-15', 0),
+(2, 4, 2, '2023-09-01', '2023-09-15', 30);
+
 -- --------------------------------------------------------
 
 --
@@ -172,6 +271,16 @@ CREATE TABLE `usuarios` (
   `Foto` text DEFAULT NULL,
   `Moroso` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+INSERT INTO `usuarios` (`Id`, `Nombre`, `Apellidos`, `Nombre_Usuario`, `Contrasena`, `Foto`, `Moroso`) VALUES
+(1, 'Ana', 'López', 'admin_ana', 'pass123', NULL, 0),
+(2, 'Carlos', 'Martínez', 'admin_car', 'pass456', NULL, 0),
+(3, 'Laura', 'Gómez', 'laura_g', 'cliente1', NULL, 0),
+(4, 'Pedro', 'Sánchez', 'pedro_s', 'cliente2', NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -269,49 +378,49 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `autores`
 --
 ALTER TABLE `autores`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `devoluciones`
 --
 ALTER TABLE `devoluciones`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `editoriales`
 --
 ALTER TABLE `editoriales`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ejemplares`
 --
 ALTER TABLE `ejemplares`
-  MODIFY `Id_Ejemplar` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id_Ejemplar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `generos`
 --
 ALTER TABLE `generos`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `gestion_inventario`
 --
 ALTER TABLE `gestion_inventario`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `prestamos`
 --
 ALTER TABLE `prestamos`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
