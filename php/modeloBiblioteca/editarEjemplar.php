@@ -1,5 +1,6 @@
 <?php
 // Iniciamos sesion y requerimos la conexión de bibliotecario (permisos totales)
+session_set_cookie_params(0, '/');
 session_start();
 require_once "../conexionDB/conexion.php";
 

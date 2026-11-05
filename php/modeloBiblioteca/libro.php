@@ -176,7 +176,7 @@ if ($ISBN_recibido) {
     <?php endif; ?>
 
     <br>
-    <a href="prestamos.php" class="volver">← Volver a los prestamos</a>
+    <a href="catalogo.php" class="volver">← Volver al catalogo</a>
 
 </body>
 

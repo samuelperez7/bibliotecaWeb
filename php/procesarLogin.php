@@ -25,19 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // 3. Comprobamos la contraseña en texto plano
             if ($usuario && $usuario['Contrasena'] === $passwordForm) {
-    
+
                 // Iniciamos sesión en PHP
+                session_set_cookie_params(0, '/');
                 session_start();
                 session_regenerate_id(true);
                 $_SESSION['id_usuario'] = $usuario['Id'];
                 $_SESSION['nombre_usuario'] = $usuario['Nombre_Usuario'];
-                if (!empty($usuario["es_bibliotecario"])) {
+                if (isset($usuario["es_bibliotecario"])) {
                     $rol = "bibliotecario";
                 } else {
                     $rol = "cliente";
                 }
+                ;
                 $_SESSION['rol'] = $rol;
-                $nombreCookieIniSess = "iniciosSesion-".md5($_SESSION['id_usuario']);
+                $nombreCookieIniSess = "iniciosSesion-" . md5($_SESSION['id_usuario']);
                 if (isset($_COOKIE[$nombreCookieIniSess])) {
                     $contInicios = $_COOKIE[$nombreCookieIniSess];
                     $contInicios++;
@@ -50,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "expires" => time() + (30 * 24 * 60 * 60),
                         "path" => "/"
                     ]);
-                };
+                }
+                ;
 
                 // 4. Redirección basada en si es bibliotecario o no
                 if ($_SESSION["rol"] === "bibliotecario") {
@@ -59,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit();
                 } else if ($_SESSION["rol"] === "cliente") {
                     // Si es un cliente normal, va a la vista de préstamos
-                    header('Location: modeloBiblioteca/prestamos.php');
+                    header('Location: modeloBiblioteca/catalogo.php');
                     exit();
                 }
 
