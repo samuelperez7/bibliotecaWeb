@@ -7,6 +7,10 @@ $params = session_get_cookie_params();
 
 $_SESSION = Array();
 
+foreach (array_keys($_SESSION) as $key) {
+    unset($_SESSION[$key]);
+};
+
 // Hacemos que la cookie caduque
 setcookie(
     session_name(), // ($_COOKIE["PHPSESSID"])

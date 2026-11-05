@@ -4,7 +4,7 @@ require_once "conexionDB/conexion.php";
 
 // Verificamos que los datos lleguen por POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+
     $usuarioForm = $_POST['inputUsuario'] ?? '';
     $passwordForm = $_POST['inputPassword'] ?? '';
 
@@ -18,28 +18,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     FROM usuarios u 
                     LEFT JOIN bibliotecarios b ON u.Id = b.Id_Usuario 
                     WHERE u.Nombre_Usuario = :nombre_usuario";
-            
+
             $stmt = $conexion->prepare($sql);
             $stmt->execute(['nombre_usuario' => $usuarioForm]);
             $usuario = $stmt->fetch();
 
             // 3. Comprobamos la contraseña en texto plano
             if ($usuario && $usuario['Contrasena'] === $passwordForm) {
-                
+    
                 // Iniciamos sesión en PHP
                 session_start();
                 session_regenerate_id(true);
                 $_SESSION['id_usuario'] = $usuario['Id'];
                 $_SESSION['nombre_usuario'] = $usuario['Nombre_Usuario'];
+                if (!empty($usuario["es_bibliotecario"])) {
+                    $rol = "bibliotecario";
+                } else {
+                    $rol = "cliente";
+                }
+                $_SESSION['rol'] = $rol;
+                $nombreCookieIniSess = "iniciosSesion-".md5($_SESSION['id_usuario']);
+                if (isset($_COOKIE[$nombreCookieIniSess])) {
+                    $contInicios = $_COOKIE[$nombreCookieIniSess];
+                    $contInicios++;
+                    setcookie($nombreCookieIniSess, $contInicios, [
+                        "path" => "/"
+                    ]);
+                } else {
+                    $contInicios = 1;
+                    setcookie($nombreCookieIniSess, "1", [
+                        "expires" => time() + (30 * 24 * 60 * 60),
+                        "path" => "/"
+                    ]);
+                };
 
                 // 4. Redirección basada en si es bibliotecario o no
-                if (!empty($usuario['es_bibliotecario'])) {
+                if ($_SESSION["rol"] === "bibliotecario") {
                     // Si está en la tabla bibliotecarios, va a su panel de gestión total
-                    header('Location: accesos.php');
+                    header('Location: modeloBiblioteca/gestionEjemplares.php');
                     exit();
-                } else {
+                } else if ($_SESSION["rol"] === "cliente") {
                     // Si es un cliente normal, va a la vista de préstamos
-                    header('Location: accesos.php');
+                    header('Location: modeloBiblioteca/prestamos.php');
                     exit();
                 }
 

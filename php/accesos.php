@@ -24,16 +24,16 @@ if (isset($_COOKIE[$nombreCookie])) {
         setcookie($nombreCookie, $accesosPagina, [
             "path" => "/"
         ]);
-    }
-    ;
+    };
 } else {
     $accesosPagina = 1;
     setcookie($nombreCookie, "1", [
         "expires" => time() + (7 * 24 * 60 * 60),
         "path" => "/"
     ]);
-}
-;
+};
+
+$iniciosSess = $_COOKIE["iniciosSesion-".md5($_SESSION['id_usuario'])];
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +52,9 @@ if (isset($_COOKIE[$nombreCookie])) {
 
     <h2>Accesos a la pagina</h2>
     <p>Has accedido a esta pagina <?= $accesosPagina ?> veces.</p>
+
+    <h2>Inicios de sesion de este usuario</h2>
+    <p>Has accedido a este usuario <?= $iniciosSess ?> veces este mes.</p>
 </body>
 
 </html>

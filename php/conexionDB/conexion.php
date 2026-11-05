@@ -3,13 +3,12 @@
 
 // Variables de conexión para cliente
 define('DB_HOST', 'localhost:3307'); // Host de la base de datos
-define('DB_NAME', 'biblioteca'); // Nombre de la base de datos
+define('DB_NAME', 'biblioteca');
+ // Nombre de la base de datos
 define('DB_USER', 'cliente'); // Usuario de la base de datos
 define('DB_PASS', 'cliente'); // Contraseña de la base de datos
 
 // Variables de conexión para biblioteca
-define('DB_HOST', 'localhost:3307');
-define('DB_NAME', 'biblioteca');
 define('DB_ADMIN', 'bibliotecario');
 define('DB_ADMIN_PASS', 'bibliotecario');
 

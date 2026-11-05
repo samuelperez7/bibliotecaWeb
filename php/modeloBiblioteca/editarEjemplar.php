@@ -3,6 +3,11 @@
 session_start();
 require_once "../conexionDB/conexion.php";
 
+if (!isset($_SESSION['nombre_usuario']) || $_SESSION["rol"] !== "bibliotecario") {
+    header('Location: ../../index.php');
+    exit();
+}
+
 $error = null;
 $conexion = conectarBibliotecario();
 
@@ -98,6 +103,7 @@ if ($idRecibido) {
 </head>
 
 <body>
+    <header><p>Pulse <a href="../logout.php">aquí</a> para salir</p></header>
     <h1>Editar el ejemplar</h1>
 
     <?php if ($error): ?>

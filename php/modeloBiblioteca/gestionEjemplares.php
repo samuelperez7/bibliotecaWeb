@@ -3,8 +3,9 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-if (!isset($_SESSION['nombre_usuario'])) {
-    die("Error - debe <a href='../index.php'>Identificarse</a>.<br />");
+if (!isset($_SESSION['nombre_usuario']) || $_SESSION["rol"] !== "bibliotecario") {
+    header('Location: ../../index.php');
+    exit();
 }
 
 require_once "../conexionDB/conexion.php";
@@ -62,7 +63,9 @@ try {
 </head>
 
 <body>
-    <header><p>Pulse <a href="logout.php">aquí</a> para salir</p></header>
+    <header>
+        <p>Pulse <a href="../logout.php">aquí</a> para salir</p>
+    </header>
 
     <h1>Panel de Bibliotecario - Gestión de Ejemplares</h1>
 
