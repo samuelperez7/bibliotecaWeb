@@ -3,7 +3,7 @@
 require_once "../conexionDB/conexion.php";
 session_start();
 
-if (!isset($_SESSION['nombre_usuario']) || $_SESSION["rol"] !== "bibliotecario") {
+if (!isset($_SESSION['nombre_usuario'])) {
     header('Location: ../../index.php');
     exit();
 }
@@ -21,7 +21,7 @@ if ($ISBN_recibido) {
         $conexion = conectarCliente();
 
         // VULNERABILIDAD: Concatenación directa de la entrada del usuario.
-        $sql = "SELECT ISBN, Titulo, Id_Autor FROM libros WHERE ISBN = :isbn";
+        $sql = "SELECT ISBN, Titulo, Id_Autor, Ruta_Portada FROM libros WHERE ISBN = :isbn";
 
 
         $stmt = $conexion->prepare($sql);
@@ -34,7 +34,7 @@ if ($ISBN_recibido) {
         if (empty($libro)) {
             $error = "No se ha encontrado ningún libro con esos datos.";
         } else {
-            $nombreCookieLibros = "registroLibros-".md5($_SESSION["id_usuario"]);
+            $nombreCookieLibros = "registroLibros-" . md5($_SESSION["id_usuario"]);
             $duracionTotal = 30 * 24 * 60 * 60;
             if (!isset($_COOKIE[$nombreCookieLibros])) {
                 $tiempoExpiracion = time() + $duracionTotal;
@@ -68,7 +68,8 @@ if ($ISBN_recibido) {
                 } else {
                     $mapaLibros[$libro["Titulo"]] = 1;
                     $contadorLibroActual = 1;
-                };
+                }
+                ;
                 setcookie(
                     $nombreCookieLibros,
                     json_encode($mapaLibros),
@@ -167,6 +168,9 @@ if ($ISBN_recibido) {
         <!-- CAMBIO CLAVE: Recorremos el array con un bucle foreach -->
         <div class="tarjeta">
             <h2><?= htmlspecialchars($libro['Titulo']) ?></h2>
+            <?php if (!empty($libro['Ruta_Portada'])): ?>
+                <img src="<?= htmlspecialchars($libro['Ruta_Portada'], ENT_QUOTES, 'UTF-8') ?>" alt="Portada del libro" style="width: 100px;">
+            <?php endif; ?>
             <p><strong>ISBN:</strong> <?= htmlspecialchars($libro['ISBN']) ?></p>
             <p><strong>Id_Autor:</strong> <?= htmlspecialchars($libro['Id_Autor']) ?></p>
             <p><strong>Veces visto este libro:</strong> <?= $contadorLibroActual ?></p>
