@@ -1,3 +1,5 @@
+<!-- Samuel Perez Ruiz -->
+
 <?php
 if (isset($_POST['tema'])) {
     $tema = $_POST['tema'];

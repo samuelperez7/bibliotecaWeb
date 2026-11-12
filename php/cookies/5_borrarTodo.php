@@ -1,3 +1,5 @@
+<!-- Samuel Perez Ruiz -->
+
 <?php
 
 // Recojo la sesion
