@@ -16,32 +16,41 @@ try {
     $conexion = conectarBibliotecario();
 
     // Consultas
-        // Autores
-        $autores = [];
-        $autores = $conexion->query("SELECT Id, Nombre, Apellidos FROM autores")->fetchAll();
+    // Autores
+    $autores = [];
+    $autores = $conexion->query("SELECT Id, Nombre, Apellidos FROM autores")->fetchAll();
 
-        // Editoriales
-        $editoriales = [];
-        $editoriales = $conexion->query("SELECT Id, Nombre FROM editoriales")->fetchAll();
+    // Editoriales
+    $editoriales = [];
+    $editoriales = $conexion->query("SELECT Id, Nombre FROM editoriales")->fetchAll();
 
     // Añadir ejemplar
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $isbn = $_POST['isbn'] ?? [];
-        $titulo = $_POST['titulo'] ?? [];
-        $sinopsis = $_POST['sinopsis'] ?? [];
-        $portada = $_POST['portada'] ?? [];
-        $autor = $_POST['autor'] ?? [];
-        $editorial = $_POST['editorial'] ?? [];
+        $isbn = [];
+        $titulo = [];
+        $sinopsis = [];
+        $portada = [];
+        $autor = [];
+        $editorial = [];
 
 
-        // Inserciones
-        for ($i; $i < 3; $i++) {
+        // Inserciones (una repeticion por cada libro)
+        for ($i = 0; $i < 3; $i++) {
+            // Recojo los datos de cada libro
+            $isbn = $_POST['isbn' . (string) $i] ?? '';
+            $titulo = $_POST['titulo' . (string) $i] ?? '';
+            $sinopsis = $_POST['sinopsis' . (string) $i] ?? '';
+            $portada = $_POST['portada' . (string) $i] ?? '';
+            $autor = $_POST['autor' . (string) $i] ?? '';
+            $editorial = $_POST['editorial' . (string) $i] ?? '';
+
+            // Inserto cada libro
             $sqlInsert = "INSERT INTO libros VALUES (:isbn, :titulo, :sinopsis, :id_autor, :id_editorial, :ruta_portada)";
             $stmtInsert = $conexion->prepare($sqlInsert);
-            $stmtInsert->execute(['isbn' => $isbn[$i], 'titulo' => $titulo[$i], 'sinopsis' => $sinopsis[$i], 'id_autor' => $id_autor[$i], 'id_editorial' => $id_editorial[$i], 'ruta_portada' => $ruta_portada[$i]]);
-            header('Location: altaLibros.php?mensaje=Libro añadido con éxito');
-            exit();
+            $stmtInsert->execute(['isbn' => $isbn, 'titulo' => $titulo, 'sinopsis' => $sinopsis, 'id_autor' => $autor, 'id_editorial' => $editorial, 'ruta_portada' => "../../media/" . $portada]);
         }
+        header('Location: altaLibros.php?mensaje=Libros añadidos con éxito');
+        exit();
     }
 
 } catch (PDOException $e) {
@@ -90,14 +99,16 @@ try {
             <select name="autor<?= $i ?>">
                 <option>Selecciona un autor</option>
                 <?php foreach ($autores as $autor): ?>
-                    <option value="<?= (int)$autor['Id'] ?>"><?= htmlspecialchars($autor['Nombre'] . ' ' . $autor['Apellidos']) ?></option>
+                    <option value="<?= (int) $autor['Id'] ?>">
+                        <?= htmlspecialchars($autor['Nombre'] . ' ' . $autor['Apellidos']) ?>
+                    </option>
                 <?php endforeach ?>
             </select><br><br>
             <label for="editorial">Editorial: </label>
             <select name="editorial<?= $i ?>">
                 <option>Selecciona una editorial</option>
                 <?php foreach ($editoriales as $editorial): ?>
-                    <option value="<?= (int)$editorial['Id'] ?>"><?= htmlspecialchars($editorial['Nombre']) ?></option>
+                    <option value="<?= (int) $editorial['Id'] ?>"><?= htmlspecialchars($editorial['Nombre']) ?></option>
                 <?php endforeach ?>
             </select>
             <br>
