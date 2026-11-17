@@ -21,7 +21,7 @@ if ($ISBN_recibido) {
         $conexion = conectarCliente();
 
         // VULNERABILIDAD: Concatenación directa de la entrada del usuario.
-        $sql = "SELECT ISBN, Titulo, Id_Autor, Ruta_Portada FROM libros WHERE ISBN = :isbn";
+        $sql = "SELECT libros.ISBN, libros.Titulo, libros.Ruta_Portada, autores.Nombre AS Nombre_Autor, autores.Apellidos AS Apellidos_Autor FROM libros LEFT JOIN autores ON libros.Id_Autor=autores.Id WHERE libros.ISBN = :isbn";
 
 
         $stmt = $conexion->prepare($sql);
@@ -172,7 +172,7 @@ if ($ISBN_recibido) {
                 <img src="<?= htmlspecialchars($libro['Ruta_Portada'], ENT_QUOTES, 'UTF-8') ?>" alt="Portada del libro" style="width: 100px;">
             <?php endif; ?>
             <p><strong>ISBN:</strong> <?= htmlspecialchars($libro['ISBN']) ?></p>
-            <p><strong>Id_Autor:</strong> <?= htmlspecialchars($libro['Id_Autor']) ?></p>
+            <p><strong>Autor:</strong> <?= htmlspecialchars($libro['Nombre_Autor']." ".$libro['Apellidos_Autor']) ?></p>
             <p><strong>Veces visto este libro:</strong> <?= $contadorLibroActual ?></p>
         </div>
 

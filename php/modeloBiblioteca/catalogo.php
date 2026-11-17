@@ -6,7 +6,7 @@ session_set_cookie_params(0, '/');
 session_start();
 
 if (!isset($_SESSION['nombre_usuario'])) {
-    header('Location: ../index.php');
+    header('Location: ../../index.php');
     exit();
 }
 
@@ -16,7 +16,7 @@ $error = null;
 try {
     $conexion = conectarCliente();
 
-    $consultaSQL = "SELECT Id_Ejemplar, ISBN_Libro, Estado FROM ejemplares";
+    $consultaSQL = "SELECT Id_Ejemplar, ISBN_Libro, Estado FROM ejemplares WHERE Estado='Disponible'";
 
     $statement = $conexion->query($consultaSQL);
 
