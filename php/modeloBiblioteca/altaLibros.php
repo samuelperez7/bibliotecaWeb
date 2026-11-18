@@ -26,15 +26,16 @@ try {
 
     // Añadir ejemplar
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $isbn = [];
-        $titulo = [];
-        $sinopsis = [];
-        $portada = [];
-        $autor = [];
-        $editorial = [];
+        $isbn = '';
+        $titulo = '';
+        $sinopsis = '';
+        $portada = '';
+        $autor = '';
+        $editorial = '';
 
 
         // Inserciones (una repeticion por cada libro)
+        $conexion->beginTransaction();
         for ($i = 0; $i < 3; $i++) {
             // Recojo los datos de cada libro
             $isbn = $_POST['isbn' . (string) $i] ?? '';
@@ -49,11 +50,15 @@ try {
             $stmtInsert = $conexion->prepare($sqlInsert);
             $stmtInsert->execute(['isbn' => $isbn, 'titulo' => $titulo, 'sinopsis' => $sinopsis, 'id_autor' => $autor, 'id_editorial' => $editorial, 'ruta_portada' => "../../media/" . $portada]);
         }
+        $conexion->commit();
         header('Location: altaLibros.php?mensaje=Libros añadidos con éxito');
         exit();
     }
 
 } catch (PDOException $e) {
+    if ($conexion instanceof PDO && $conexion->inTransaction()) {
+        $conexion->rollBack();
+    }
     $error = "Error en la base de datos: " . $e->getMessage();
 }
 ?>
