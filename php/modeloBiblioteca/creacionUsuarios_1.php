@@ -1,4 +1,7 @@
 <?php
+
+// Samuel Pérez Ruiz
+
 // Iniciamos sesion y requerimos la conexión de bibliotecario (permisos totales)
 session_start();
 
@@ -7,15 +10,15 @@ if (!isset($_SESSION['nombre_usuario']) || $_SESSION["rol"] !== "bibliotecario")
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['caso'])) {
-        header('Location: altaUsuarios.php?caso='.$_POST['caso']);
-        exit();
-    } else {
-        header('Location: altaUsuariosCaso.php');
-        exit();
-    }
+require_once "../conexionDB/conexion.php";
+
+// Despues de enviar el formulario (redirigo a la pagina 2)
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $caso = $_POST['caso'];
+    header('Location: creacionUsuarios_2.php?caso='.(string)$caso);
+    exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -63,22 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button:hover {
             background-color: #004494;
         }
-
-        .mensaje {
-            padding: 10px;
-            background-color: #eef;
-            border-left: 4px solid #0056b3;
-            margin-bottom: 15px;
-        }
+        
     </style>
 </head>
 
 <body>
 
-    <h1>Panel de Bibliotecario - Alta de Usuarios</h1>
+    <h1>Alta de Usuarios</h1>
 
     <!-- IMPORTANTE: enctype="multipart/form-data" es obligatorio para poder enviar archivos ($_FILES) -->
-    <form action="altaUsuariosCaso.php" method="POST" enctype="multipart/form-data">
+    <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST" enctype="multipart/form-data">
 
         <label>
             Caso a ejecutar:
@@ -92,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <br>
 
-        <button type="submit">Continuar</button>
+        <button type="submit">Siguiente</button>
     </form>
 
 </body>
